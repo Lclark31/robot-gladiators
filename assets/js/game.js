@@ -21,14 +21,15 @@ var fight = function(enemyName) {
       if (confirmSkip) {
         window.alert(playerName + ' has decided to skip this fight. Goodbye!');
         // subtract money from playerMoney for skipping
-        playerMoney = playerMoney - 10;
+        playerMoney = Math.max(0, playerMoney - 10);
         console.log("playerMoney", playerMoney)
         break;
       }
     }
 
     // remove enemy's health by subtracting the amount set in the playerAttack variable
-    enemyHealth = enemyHealth - playerAttack;
+    var damage = randomNumber(playerAttack - 3, playerAttack);
+    enemyHealth = Math.max(0, enemyHealth - damage);
     console.log(
       playerName + ' attacked ' + enemyName + '. ' + enemyName + ' now has ' + enemyHealth + ' health remaining.'
     );
@@ -47,7 +48,8 @@ var fight = function(enemyName) {
     }
 
     // remove players's health by subtracting the amount set in the enemyAttack variable
-    playerHealth = playerHealth - enemyAttack;
+    var damage = randomNumber(enemyAttack - 3, enemyAttack);
+    playerHealth = Math.max(0, playerHealth - enemyAttack);
     console.log(
       enemyName + ' attacked ' + playerName + '. ' + playerName + ' now has ' + playerHealth + ' health remaining.'
     );
@@ -63,6 +65,7 @@ var fight = function(enemyName) {
   }
 };
 
+// starting the game
 var startGame = function() {
   playerHealth = 100;
   playerAttack = 10;
@@ -72,7 +75,7 @@ var startGame = function() {
     if (playerHealth > 0) {
       window.alert(`Welcome to Robot Gladiators! Round ${(i + 1)}`);
     var pickedEnemyName = enemyNames[i];
-    enemyHealth = 50;
+    enemyHealth = randomNumber(40, 60);
     debugger;
     fight(pickedEnemyName);
     } else {
@@ -90,6 +93,7 @@ var startGame = function() {
 endGame();
 };
 
+// ending/reseting the game
 let endGame = function() {
   if (playerHealth > 0) {
   window.alert(`Great job, you survived the game! You now have a score of ${playerMoney}.`);
@@ -105,6 +109,7 @@ let endGame = function() {
   }
 };
 
+// utilizing the shop
 let shop = function() {
   let shopOptionPrompt = window.prompt("Would you like to REFILL your health, UPGRADE your attack, or LEAVE the shop?");
   switch (shopOptionPrompt) {
@@ -141,5 +146,12 @@ let shop = function() {
         break;
   }
 };
+
+// creating random numbers
+let randomNumber = function(min, max) {
+  let value = Math.floor(Math.random() * (max - min + 1) + min);
+
+  return value;
+}
 
 startGame();
